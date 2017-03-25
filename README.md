@@ -101,8 +101,37 @@ looks like this:
 In command prompt, change directory to the `<solution dir>\src`, and
 run following commands:
 
-    dotnet new sln --name DockerDotNet
+    dotnet new sln --name DockerDotNetCore
     dotnet new classlib --name Infrastructure.Logging
     dotnet new webapi --name WebApi
     dotnet new xunit --name WebApi.Test.Unit
     dotnet new console --name Client
+
+    dotnet sln .\DockerDotNetCore.sln add .\Infrastructure.Logging\Infrastructure.Logging.csproj
+    dotnet sln .\DockerDotNetCore.sln add .\WebApi\WebApi.csproj
+    dotnet sln .\DockerDotNetCore.sln add .\WebApi.Test.Unit\WebApi.Test.Unit.csproj
+    dotnet sln .\DockerDotNetCore.sln add .\Client\Client.csproj
+
+    dotnet add .\WebApi\WebApi.csproj reference .\Infrastructure.Logging\Infrastructure.Logging.csproj
+    dotnet add .\Client\Client.csproj reference .\Infrastructure.Logging\Infrastructure.Logging.csproj
+    dotnet add .\WebApi.Test.Unit\WebApi.Test.Unit.csproj reference .\WebApi\WebApi.csproj
+    dotnet add .\WebApi.Test.Unit\WebApi.Test.Unit.csproj reference .\Infrastructure.Logging\Infrastructure.Logging.csproj
+
+As a result, the soluition structure will look like this:
+
+    build\
+    src\
+      Client\
+      Infrastructure.Logging\
+      WebApi\
+      WebApi.Test.Unit\
+
+Build the solution to make sure that everything was done correctly:
+
+    dotnet restore .\DockerDotNetCore.sln
+    dotnet build .\DockerDotNetCore.sln
+    dotnet test .\WebApi.Test.Unit\WebApi.Test.Unit.csproj
+    dotnet publish .\DockerDotNetCore.sln
+
+You may add a build scripts in the `build` folder to automate the steps above,
+this repository uses [FAKE](http://fsharp.github.io/FAKE/ "FAKE") build script.
