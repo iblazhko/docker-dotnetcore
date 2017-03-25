@@ -87,3 +87,22 @@ of software running in isolation.
 Containers only bundle dependencies required to run
 the software, unlike a Virtual Machine that isolates
 full operating system.
+
+## Step 1. Solution Skeleton
+
+
+Create `src` and `build` directories, so that the top-level structure
+looks like this:
+
+    build\
+    src\
+    README.md
+
+In command prompt, change directory to the `<solution dir>\src`, and
+run following commands:
+
+    dotnet new sln --name DockerDotNet
+    dotnet new classlib --name Infrastructure.Logging
+    dotnet new webapi --name WebApi
+    dotnet new xunit --name WebApi.Test.Unit
+    dotnet new console --name Client
